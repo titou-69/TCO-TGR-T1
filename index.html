@@ -2,145 +2,52 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PCC - Éditeur de Ligne</title>
-
-<style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #1e1e2f;
-    color: white;
-    display: flex;
-    height: 100vh;
-}
-
-#toolbar {
-    width: 260px;
-    background: #2c2c3e;
-    padding: 15px;
-    box-sizing: border-box;
-}
-
-#canvas-container {
-    flex: 1;
-    background: #111;
-}
-
-button {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    background: #0066cc;
-    color: white;
-}
-
-button:hover {
-    background: #004999;
-}
-
-canvas {
-    background: #000;
-    cursor: crosshair;
-}
-</style>
+<title>Centre de Régulation Ferroviaire</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="toolbar">
-    <h2>🎛 PCC - Éditeur</h2>
+<header>
+<h1>🚆 Centre de Régulation - Ligne Démo</h1>
+</header>
 
-    <button onclick="clearLine()">🗑 Effacer</button>
-    <button onclick="saveLine()">💾 Sauvegarder</button>
-    <button onclick="loadLine()">📂 Charger</button>
+<div class="main">
 
-    <input type="file" id="fileInput" style="display:none" />
+<div class="network">
+<svg id="svg" viewBox="0 0 1200 400">
+
+<!-- Cantons -->
+<rect id="c0" x="100" y="180" width="200" height="40" fill="#444"/>
+<rect id="c1" x="300" y="180" width="200" height="40" fill="#444"/>
+<rect id="c2" x="500" y="180" width="200" height="40" fill="#444"/>
+<rect id="c3" x="700" y="180" width="200" height="40" fill="#444"/>
+
+<!-- Signaux -->
+<circle id="s0" cx="290" cy="200" r="8" fill="green"/>
+<circle id="s1" cx="490" cy="200" r="8" fill="green"/>
+<circle id="s2" cx="690" cy="200" r="8" fill="green"/>
+<circle id="s3" cx="890" cy="200" r="8" fill="green"/>
+
+<!-- Train -->
+<rect id="train" x="120" y="185" width="30" height="30" fill="cyan"/>
+
+</svg>
 </div>
 
-<div id="canvas-container">
-    <canvas id="canvas"></canvas>
+<div class="sidebar">
+
+<h2>📊 Supervision</h2>
+
+<div id="statusPanel"></div>
+
+<button onclick="toggleSimulation()">▶️ Pause / Reprise</button>
+<button onclick="addIncident()">⚠️ Incident aléatoire</button>
+<button onclick="saveState()">💾 Sauvegarder</button>
+
 </div>
 
-<script>
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+</div>
 
-canvas.width = window.innerWidth - 260;
-canvas.height = window.innerHeight;
-
-let points = [];
-
-canvas.addEventListener("click", function(e) {
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    points.push({x, y});
-    draw();
-});
-
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    if (points.length < 1) return;
-
-    ctx.beginPath();
-    ctx.moveTo(points[0].x, points[0].y);
-
-    for (let i = 1; i < points.length; i++) {
-        ctx.lineTo(points[i].x, points[i].y);
-    }
-
-    ctx.strokeStyle = "#00ffcc";
-    ctx.lineWidth = 4;
-    ctx.stroke();
-
-    // Dessin des points
-    for (let p of points) {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, 6, 0, Math.PI * 2);
-        ctx.fillStyle = "red";
-        ctx.fill();
-    }
-}
-
-function clearLine() {
-    points = [];
-    draw();
-}
-
-function saveLine() {
-    const dataStr = JSON.stringify(points);
-    const blob = new Blob([dataStr], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "ligne_pcc.json";
-    a.click();
-
-    URL.revokeObjectURL(url);
-}
-
-function loadLine() {
-    document.getElementById("fileInput").click();
-}
-
-document.getElementById("fileInput").addEventListener("change", function(e) {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = function(event) {
-        points = JSON.parse(event.target.result);
-        draw();
-    };
-
-    reader.readAsText(file);
-});
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
