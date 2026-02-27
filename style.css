@@ -1,66 +1,39 @@
-body {
-background:black;
-color:white;
-font-family:Arial;
-margin:0;
-}
+body { margin:0; background:black; color:white; font-family:Arial; }
+header { background:#111; padding:10px; text-align:center; }
 
-header {
-background:#111;
+.toolbar {
+background:#222;
 padding:10px;
-text-align:center;
 }
 
-.container {
+button {
+margin-right:5px;
+padding:8px;
+background:#0066cc;
+border:none;
+color:white;
+cursor:pointer;
+}
+
+.main {
 display:flex;
+height:90vh;
 }
 
-svg {
+#canvas {
 flex:3;
 background:black;
 }
 
-.panel {
+.sidepanel {
 flex:1;
 background:#1a1a1a;
-padding:15px;
-}
-
-.canton {
-fill:#444;
-stroke:#888;
-stroke-width:2;
-cursor:pointer;
-}
-
-.canton.ligne { fill:#555; }
-.canton.station { fill:#0066aa; }
-.canton.depot { fill:#444400; }
-
-.canton.occupied {
-fill:#00cc00 !important;
-}
-
-.aiguille {
-fill:gray;
-cursor:pointer;
-}
-
-.aiguille.active {
-fill:orange;
-}
-
-.label {
-fill:white;
-font-size:14px;
-}
-
-button {
-width:100%;
 padding:10px;
-margin-top:10px;
-background:#0066cc;
-color:white;
-border:none;
-cursor:pointer;
+overflow:auto;
 }
+
+.node { fill:white; }
+.edge { stroke:#888; stroke-width:4; }
+.edge.occupied { stroke:#00ff00; }
+.train { fill:cyan; }
+.station { fill:yellow; font-size:12px; }
