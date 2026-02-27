@@ -1,114 +1,86 @@
-let cantons = [
-{occupied:false, incident:false},
-{occupied:false, incident:false},
-{occupied:false, incident:false},
-{occupied:false, incident:false}
-];
+let cantons = {};
+let trains = [];
+let aiguillage = false;
 
-let train = {
-canton:0,
-progress:0
+document.querySelectorAll(".canton").forEach(c => {
+cantons[c.id] = {
+id:c.id,
+type:c.classList.contains("station") ? "station" :
+     c.classList.contains("depot") ? "depot" : "ligne",
+occupied:false
 };
 
-let running = true;
-
-function updateSignals(){
-for(let i=0;i<cantons.length;i++){
-let signal = document.getElementById("s"+i);
-
-if(i === cantons.length-1){
-signal.setAttribute("fill","green");
-continue;
-}
-
-if(cantons[i+1].occupied || cantons[i+1].incident){
-signal.setAttribute("fill","red");
-}else{
-signal.setAttribute("fill","green");
-}
-}
-}
-
-function updateDisplay(){
-
-cantons.forEach((c,i)=>{
-let rect = document.getElementById("c"+i);
-
-if(c.incident){
-rect.setAttribute("fill","#800");
-}
-else if(c.occupied){
-rect.setAttribute("fill","#0a0");
-}
-else{
-rect.setAttribute("fill","#444");
-}
+c.addEventListener("click",()=>{
+toggleOccupation(c.id);
+});
 });
 
-let panel = document.getElementById("statusPanel");
-panel.innerHTML = "";
-
-cantons.forEach((c,i)=>{
-panel.innerHTML += `
-<p>Canton ${i} :
-${c.occupied ? "🚆 Occupé" : "Libre"}
-${c.incident ? " ⚠️ Incident" : ""}
-</p>`;
+document.getElementById("A1").addEventListener("click",()=>{
+aiguillage = !aiguillage;
+document.getElementById("A1").classList.toggle("active");
 });
+
+function toggleOccupation(id){
+cantons[id].occupied = !cantons[id].occupied;
+document.getElementById(id).classList.toggle("occupied");
+updateInfo();
 }
 
-function moveTrain(){
-
-if(!running) return;
-
-let current = train.canton;
-
-if(train.progress >= 1){
-
-if(current < cantons.length-1 &&
-!cantons[current+1].occupied &&
-!cantons[current+1].incident){
-
-cantons[current].occupied = false;
-train.canton++;
-cantons[train.canton].occupied = true;
-train.progress = 0;
-
+function addTrain(){
+for(let id in cantons){
+if(!cantons[id].occupied){
+cantons[id].occupied = true;
+document.getElementById(id).classList.add("occupied");
+trains.push({position:id});
+break;
 }
-}else{
-train.progress += 0.01;
+}
+updateInfo();
 }
 
-let x = 120 + train.canton*200 + train.progress*200;
-document.getElementById("train").setAttribute("x",x);
-
-updateSignals();
-updateDisplay();
+function updateInfo(){
+let txt="";
+for(let id in cantons){
+txt += `${id} (${cantons[id].type}) : ${cantons[id].occupied ? "Occupé" : "Libre"}<br>`;
+}
+document.getElementById("info").innerHTML = txt;
 }
 
-function loop(){
-moveTrain();
-requestAnimationFrame(loop);
-}
-
-function toggleSimulation(){
-running = !running;
-}
-
-function addIncident(){
-let i = Math.floor(Math.random()*cantons.length);
-cantons[i].incident = true;
-}
-
-function saveState(){
-let data = JSON.stringify(cantons);
-let blob = new Blob([data], {type:"application/json"});
-let a = document.createElement("a");
-a.href = URL.createObjectURL(blob);
-a.download = "etat_reseau.json";
+function save(){
+let data = {cantons, aiguillage};
+let blob = new Blob([JSON.stringify(data)], {type:"application/json"});
+let a=document.createElement("a");
+a.href=URL.createObjectURL(blob);
+a.download="tco_state.json";
 a.click();
 }
 
-cantons[0].occupied = true;
+function load(){
+document.getElementById("fileInput").click();
+}
 
-loop();
+document.getElementById("fileInput").addEventListener("change",e=>{
+let reader=new FileReader();
+reader.onload=function(evt){
+let data=JSON.parse(evt.target.result);
+cantons=data.cantons;
+aiguillage=data.aiguillage;
+refresh();
+};
+reader.readAsText(e.target.files[0]);
+});
+
+function refresh(){
+for(let id in cantons){
+let el=document.getElementById(id);
+if(cantons[id].occupied){
+el.classList.add("occupied");
+}else{
+el.classList.remove("occupied");
+}
+}
+document.getElementById("A1").classList.toggle("active",aiguillage);
+updateInfo();
+}
+
+updateInfo();
