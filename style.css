@@ -1,0 +1,44 @@
+body {
+margin:0;
+font-family:Arial;
+background:#111;
+color:white;
+}
+
+header {
+background:#000;
+padding:10px;
+text-align:center;
+}
+
+.main {
+display:flex;
+height:90vh;
+}
+
+.network {
+flex:3;
+background:#1a1a1a;
+}
+
+.sidebar {
+flex:1;
+background:#222;
+padding:15px;
+overflow:auto;
+}
+
+button {
+width:100%;
+padding:10px;
+margin-top:10px;
+border:none;
+border-radius:5px;
+background:#0066cc;
+color:white;
+cursor:pointer;
+}
+
+button:hover {
+background:#004999;
+}
