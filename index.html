@@ -2,48 +2,46 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Centre de Régulation Ferroviaire</title>
+<title>TCO Tram-Train</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-<h1>🚆 Centre de Régulation - Ligne Démo</h1>
+<h1>TCO Tram-Train - Centre de Régulation</h1>
 </header>
 
-<div class="main">
+<div class="container">
 
-<div class="network">
-<svg id="svg" viewBox="0 0 1200 400">
+<svg id="tco" viewBox="0 0 1400 600">
 
-<!-- Cantons -->
-<rect id="c0" x="100" y="180" width="200" height="40" fill="#444"/>
-<rect id="c1" x="300" y="180" width="200" height="40" fill="#444"/>
-<rect id="c2" x="500" y="180" width="200" height="40" fill="#444"/>
-<rect id="c3" x="700" y="180" width="200" height="40" fill="#444"/>
+<!-- LIGNE PRINCIPALE -->
+<rect id="C1" class="canton ligne" x="100" y="250" width="200" height="30"/>
+<rect id="C2" class="canton station" x="300" y="250" width="200" height="30"/>
+<rect id="C3" class="canton ligne" x="500" y="250" width="200" height="30"/>
+<rect id="C4" class="canton station" x="700" y="250" width="200" height="30"/>
+<rect id="C5" class="canton ligne" x="900" y="250" width="200" height="30"/>
 
-<!-- Signaux -->
-<circle id="s0" cx="290" cy="200" r="8" fill="green"/>
-<circle id="s1" cx="490" cy="200" r="8" fill="green"/>
-<circle id="s2" cx="690" cy="200" r="8" fill="green"/>
-<circle id="s3" cx="890" cy="200" r="8" fill="green"/>
+<!-- DEPOT -->
+<rect id="D1" class="canton depot" x="500" y="100" width="200" height="30"/>
+<line x1="600" y1="130" x2="600" y2="250" stroke="gray" stroke-width="8"/>
 
-<!-- Train -->
-<rect id="train" x="120" y="185" width="30" height="30" fill="cyan"/>
+<!-- AIGUILLAGE -->
+<polygon id="A1" class="aiguille" points="580,250 620,250 600,230"/>
+
+<!-- NOMS -->
+<text x="350" y="240" class="label">GDR</text>
+<text x="750" y="240" class="label">AIG</text>
+<text x="580" y="90" class="label">DEPOT</text>
 
 </svg>
-</div>
 
-<div class="sidebar">
-
-<h2>📊 Supervision</h2>
-
-<div id="statusPanel"></div>
-
-<button onclick="toggleSimulation()">▶️ Pause / Reprise</button>
-<button onclick="addIncident()">⚠️ Incident aléatoire</button>
-<button onclick="saveState()">💾 Sauvegarder</button>
-
+<div class="panel">
+<button onclick="addTrain()">Ajouter Tram</button>
+<button onclick="save()">Sauvegarder</button>
+<button onclick="load()">Charger</button>
+<input type="file" id="fileInput" hidden>
+<div id="info"></div>
 </div>
 
 </div>
