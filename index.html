@@ -2,50 +2,34 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>TCO Tram-Train</title>
+<title>PCC Tram-Train Pro</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-<h1>TCO Tram-Train - Centre de Régulation</h1>
+<h1>PCC Tram-Train - Mode Professionnel</h1>
 </header>
 
-<div class="container">
+<div class="toolbar">
+<button onclick="setMode('edit')">🛠 Mode Édition</button>
+<button onclick="setMode('run')">🚊 Mode Exploitation</button>
+<button onclick="saveProject()">💾 Sauvegarder</button>
+<input type="file" id="fileLoader" hidden>
+<button onclick="loadProject()">📂 Charger</button>
+</div>
 
-<svg id="tco" viewBox="0 0 1400 600">
+<div class="main">
 
-<!-- LIGNE PRINCIPALE -->
-<rect id="C1" class="canton ligne" x="100" y="250" width="200" height="30"/>
-<rect id="C2" class="canton station" x="300" y="250" width="200" height="30"/>
-<rect id="C3" class="canton ligne" x="500" y="250" width="200" height="30"/>
-<rect id="C4" class="canton station" x="700" y="250" width="200" height="30"/>
-<rect id="C5" class="canton ligne" x="900" y="250" width="200" height="30"/>
+<svg id="canvas"></svg>
 
-<!-- DEPOT -->
-<rect id="D1" class="canton depot" x="500" y="100" width="200" height="30"/>
-<line x1="600" y1="130" x2="600" y2="250" stroke="gray" stroke-width="8"/>
-
-<!-- AIGUILLAGE -->
-<polygon id="A1" class="aiguille" points="580,250 620,250 600,230"/>
-
-<!-- NOMS -->
-<text x="350" y="240" class="label">GDR</text>
-<text x="750" y="240" class="label">AIG</text>
-<text x="580" y="90" class="label">DEPOT</text>
-
-</svg>
-
-<div class="panel">
-<button onclick="addTrain()">Ajouter Tram</button>
-<button onclick="save()">Sauvegarder</button>
-<button onclick="load()">Charger</button>
-<input type="file" id="fileInput" hidden>
+<div class="sidepanel">
+<h3>Infos</h3>
 <div id="info"></div>
 </div>
 
 </div>
 
-<script src="script.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
